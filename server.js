@@ -13,15 +13,15 @@ axios.get("https://www.history.com/news").then(function(response){
 
   // With cheerio, find each p-tag with the "title" class
   // (i: iterator. element: the current element)
-  $("h2").each(function(i, element) {
+  $(".m-card--content").each(function(i, element) {
 
     // Save the text of the element in a "title" variable
-    var title = $(element).text();
+    var title = $(element).children('h2').text();
     console.log('title' + title);
     // In the currently selected element, look at its child elements (i.e., its a-tags),
     // then save the values for any "href" attributes that the child elements may have
-    var link = 'history.com' + $(element).parent('a').attr("href");
-    var summary = $(element).text('.m-card--body').text();
+    var link = 'history.com' + $(element).children('a').attr("href");
+    var summary = $(element).children('.m-card--body').text();
     // Save these results in an object that we'll push into the results array we defined earlier
     results.push({
       title: title,
