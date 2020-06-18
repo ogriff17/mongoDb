@@ -1,35 +1,45 @@
-var express = require ('express');
-var handlebars = require ('express-handlebars');
+var express = require("express");
+//var mongojs = require("mongojs");
 var mongoose = require('mongoose');
-var cheerio = require('cheerio');
-var axios = require('axios');
-const { text } = require('body-parser');
+var exphbs = require('express-handlebars');
+var Note = require ('./models/Note.js');
+var Article = require('./models/Article.js');
+const bodyParser = require("body-parser");
 
-axios.get("https://www.history.com/news").then(function(response){
+mongoose.Promise = Promise;
 
-  var $ = cheerio.load(response.data);
+// Initialize Express
+var app = express();
 
-  var results = [];
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-  // With cheerio, find each p-tag with the "title" class
-  // (i: iterator. element: the current element)
-  $(".m-card--content").each(function(i, element) {
+app.use(express.static(process.cwd() + " /public"));
 
-    // Save the text of the element in a "title" variable
-    var title = $(element).children('h2').text();
-    console.log('title' + title);
-    // In the currently selected element, look at its child elements (i.e., its a-tags),
-    // then save the values for any "href" attributes that the child elements may have
-    var link = 'history.com' + $(element).children('a').attr("href");
-    var summary = $(element).children('.m-card--body').text();
-    // Save these results in an object that we'll push into the results array we defined earlier
-    results.push({
-      title: title,
-      link: link,
-      summary: summary
-    });
-  });
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+mongoose.connect(MONGODB_URI);
 
-  // Log the results once you've looped through each of the elements found with cheerio
-  console.log(results);
+var db = mongoose.connection;
+db.on('error', function(){
+  console.log("Mongoose error: ", error);
 });
+
+db.once('open', function(){
+  console.log("Mongoose connection successful!");
+});
+
+app.engine("handlebars", exphbs({defaultLayout: "main"}));
+app.set("view engine", "handlebars");
+
+var router = express.Router();
+
+require("./config/routes")(router);
+
+app.use(router);
+
+var port = process.env.PORT || 3001;
+app.listen(port, function(){
+  console.log(" app running on port " + port);
+});
+
