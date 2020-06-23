@@ -16,8 +16,8 @@ module. exports = {
             });
         });
     },
-    get: function(query, cb){
-        Article.find(query)
+    get: function(req, res){ //(req, rep); 
+        Article.find(req.query)
         .sort({
             _id: -1
         })
