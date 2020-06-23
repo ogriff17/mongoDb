@@ -6,18 +6,8 @@ body{
     font-family: Georgia, Times, 'Times New Roman', serif; 
     line-height: 34px; 
     font-size: 18px;
-    /* background-color: red, linear-gradient(to bottom, #00000067, rgba(0, 0, 0, 0.75)),
- url("../img/sunsetpyramids.jpg"); 
-    width: 100%;
-    height: 400px;
-    background-size: cover;
-    color: rgb(255, 255, 255) ;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: 100% 100%;
-    content: ''; */
     background-image:url("../img/sunsetpyramids.jpg");
-    background-repeat:no-repeat;
+    background-repeat:repeat;
     background-size:100% 100%;
     height:100vh;
 }
